@@ -1,0 +1,264 @@
+openapi: 3.0.0
+info:
+  title: ToDo Liste
+  description: ToDo Liste nach OpenAPI Spezifikation
+  version: 1.0.0
+
+servers:
+  - url: http://127.0.0.1/
+    description: localhost
+
+paths:
+  /todo-list/{list_id}:
+    get:
+      summary: Liefert alle Einträge einer Todo-Liste zurück.
+      parameters:
+        - name: list_id
+          in: path
+          required: true
+          description:  ID der gewünschten Liste
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Die Gewünschte ToDo Liste
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/todoList'
+
+    delete:
+      summary: Löscht eine komplette Todo-Liste mit allen Einträgen.
+      parameters:
+        - name: list_id
+          in: path
+          required: true
+          description: ID der gewünschten Liste
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Liste wurde nicht gefunden
+
+  /todo-list:
+    post:
+      summary: Fügt eine neue Todo-Liste hinzu.
+      requestBody:
+        description: JSON-Objekt der Todo-Liste (keine ID)
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/todoList_noid'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/todoList'
+
+  /todo-list/{list_id}/entry:
+    post:
+      summary: Fügt einen Eintrag zu einer bestehenden Todo-Liste hinzu.
+      parameters:
+        - name: list_id
+          in: path
+          required: true
+          description: ID der gewünschten Liste
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: JSON-Objekt des Eintrags
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/todoEntry_noid'
+
+      responses:
+        '200':
+          description: JSON-Objekt des Eintrags mit ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/todoEntry'
+
+  /todo-list/{list_id}/entry/{entry_id}:
+    put:
+      summary: Aktualisiert einen bestehenden Eintrag.
+      parameters:
+        - name: list_id
+          in: path
+          required: true
+          description: ID der gewünschten Liste
+          schema:
+            type: string
+            format: uuid
+        - name: entry_id
+          in: path
+          required: true
+          description: ID des gewünschten Eintrags
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: JSON-Objekt des Eintrags
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/todoEntry_noid'
+      responses:
+        '200':
+          description: JSON-Objekt des Eintrags mit ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/todoEntry"
+
+    delete:
+      summary: Löscht einen einzelnen Eintrag einer Todo-Liste.
+      parameters:
+        - name: list_id
+          in: path
+          required: true
+          description: ID der gewünschten Liste
+          schema:
+            type: string
+            format: uuid
+        - name: entry_id
+          in: path
+          required: true
+          description: ID des gewünschten Eintrags
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: ID Not Found
+
+  /user:
+    get:
+      summary: Liefert eine Liste aller Benutzer zurück.
+      responses:
+        '200':
+          description: Listenobjekt mit Liste aller Benutzer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userList'
+
+    post:
+      summary: Fügt einen neuen Benutzer hinzu.
+      requestBody:
+        required: true
+        description: JSON-Objekt des Benutzers
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user_noid'
+      responses:
+        '200':
+          description: JSON-Objekt des Benutzers mit ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+  /user/{user_id}:
+    delete:
+      summary: Löscht einen Benutzer.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: ID des Users, der gelöscht werden soll
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User wurde erfolgreich gelöscht
+        '404':
+          description: Es wurde kein User zu der angegebenen User ID gefunden
+
+components:
+  schemas:
+    todoEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        list_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+    todoEntry_noid:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        list_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+
+    todoList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/todoEntry'
+
+    todoList_noid:
+      type: object
+      properties:
+        name:
+          type: string
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/todoEntry'
+
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    user_noid:
+      type: object
+      properties:
+        name:
+          type: string
+    userList:
+      type: array
+      items:
+        $ref: '#/components/schemas/user'
