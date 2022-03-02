@@ -30,7 +30,7 @@ def get_delete_list(list_id):
         list = get_list(list_id)
         if list is None:
             # if no list is found return 404
-            abort(404)
+            return '', 404
         else:
             return list.toJson(), 200
 
@@ -38,12 +38,17 @@ def get_delete_list(list_id):
         list = get_list(list_id)
         if list is None:
             # if no list is found return 404
-            abort(404)
+            return '', 404
         else:
-            todoLists.pop(list_id)  # check if this works
+            print(todoLists)
+            try:
+                del todoLists[list_id]  # check if this works
+            except KeyError:
+                return '', 404
+            print(todoLists)
             return '', 200
         # if no list is found return 404
-        abort(404)
+        return '', 404
     else:
         abort(405)  # Method not allowed
 
@@ -71,20 +76,20 @@ def add_to_todolist(list_id):
     list = get_list(list_id)
     if list is None:
         # if no list is found return 404
-        abort(404)
+        return '', 404
     else:
         data = request.get_json()
         entry = TodoEntry(data['name'], data['description'], list_id, data['user_id'])
         list.entries[entry.id] = entry
-        return list.toJson(), 200
-    # abort(404)
+        return jsonify(entry.id), 200
+    # return '', 404
 
 
 @app.route("/todo-list/<list_id>/entry/<entry_id>", methods=["PUT", "DELETE"])
 def change_todolist_entry(list_id, entry_id):
     list = get_list(list_id)
     if list is None:
-        abort(404)
+        return '', 404
 
     if request.method == "PUT":
 
@@ -97,13 +102,13 @@ def change_todolist_entry(list_id, entry_id):
         # replace the old entry with the new one
         set_entry(list_id, entry_id, new_entry)
 
-        return jsonify("OK", success=True)
+        return '', 200
     elif request.method == "DELETE":
         # successful delete
         if delete_entry(list_id, entry_id):
             return '', 200
         else:
-            abort(404)
+            return '', 404
     else:
         abort(405)
 
@@ -135,13 +140,14 @@ def delete_user(user_id):
         del userList[user_id]
         return '', 200
     else:
-        abort(404)
+        return '', 404
 
 
 def get_list(list_id):
-    if todoLists[list_id]:
+    try:
         return todoLists[list_id]
-    return None
+    except KeyError:
+        return None
 
 
 def set_list(list_id, new_list):
@@ -170,10 +176,11 @@ def delete_entry(list_id, entry_id):
     list = get_list(list_id)
     print(list.entries, entry_id)
 
-    if list.entries[entry_id]:
+    try:
         del list.entries[entry_id]
         return True
-    return False
+    except KeyError:
+        return False
 
 
 class TodoEntry:
