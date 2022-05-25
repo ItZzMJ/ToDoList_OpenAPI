@@ -1,7 +1,6 @@
 import json
 import random
 from pprint import pprint
-
 from flask import Flask, jsonify, request, abort
 import uuid
 
