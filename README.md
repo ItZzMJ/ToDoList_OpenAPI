@@ -1,6 +1,5 @@
 # Deployment einer Webanwendung
-
-## Deckblatt
+Von Armin Spöllmann und Jannik Möbius
 
 ## Inhaltsverzeichnis
 
@@ -100,6 +99,7 @@ sudo apt-get install ufw
 Firewall Regeln festlegen
 ````
 sudo ufw allow 22
+sudo ufw allow from 192.168.24.0/16 to any port 22
 sudo ufw allow 80
 sudo ufw allow 443
 ````
