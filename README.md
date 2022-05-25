@@ -98,11 +98,69 @@ Firewall aktivieren
 sudo ufw enable
 ````
 
-### ToDo-Listen-Verwaltung deployen
+### ToDo-Listen-Verwaltung und Nextcloud deployen
 
 Git, Docker und Docker Compose installieren
 ````
-sudo apt-get install git
+sudo apt install git docker-ce docker-ce-cli containerd.io docker-compose-plugin
 ````
 
-### Nextcloud Filehosting als Docker Container 
+Set up docker as non-root user
+````
+sudo groupadd docker
+sudo usermod -aG docker pi
+````
+
+Code von git pullen
+````
+git clone https://github.com/ItZzMJ/ToDoList_OpenAPI.git
+cd ToDoList_OpenAPI
+````
+
+App starten
+````
+python main.py
+````
+
+Nun ist die API über die IP 192.168.24.164 erreichbar
+
+#### Autostart
+
+Für App autostart supervisor installieren:
+````
+sudo apt install supervisor
+````
+
+Eine Konfigurationsdatei erstellen
+````
+sudo nano /etc/supervisor/conf.d/todolist.conf
+````
+
+Content der Configdatei:
+````
+[program:flask_app]
+command = python main.py
+directory = /home/pi/code/ToDoList_OpenAPI/
+autostart = true
+autorestart = true
+````
+
+Supervisor aktualisieren und starten
+````
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start flask_app
+````
+
+#### Mit Docker
+
+Container builden
+````
+docker-compose build
+````
+
+Container starten
+````
+docker-compose up -d
+````
+
