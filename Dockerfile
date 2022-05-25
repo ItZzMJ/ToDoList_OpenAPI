@@ -6,6 +6,6 @@ ENV FLASK_RUN_HOST=0.0.0.0
 RUN apk add --no-cache gcc musl-dev linux-headers nano bash
 COPY ./requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-EXPOSE 5000, 80
+EXPOSE 80
 COPY . /data
 CMD ["flask", "run"]
