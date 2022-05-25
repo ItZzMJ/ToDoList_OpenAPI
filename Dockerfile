@@ -8,4 +8,4 @@ COPY ./requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 EXPOSE 80
 COPY . /data
-CMD ["python", "main.py"]
+CMD ["python", "/data/main.py"]
