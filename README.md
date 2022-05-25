@@ -46,8 +46,8 @@ GROUP=netdev
 country=de
 update_config=1
 network={
-    ssid="r324-public"
-    psk="aehUa6ye"
+    ssid="<SSID>"
+    psk="<PASSWORD>"
 }
 ````
 Anschließen den Service neustarten
