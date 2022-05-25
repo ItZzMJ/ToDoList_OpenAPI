@@ -5,6 +5,7 @@ services:
     ports:
       - "80:80"
       - "8000:5000"
+    restart: unless-stopped
 
   nextcloud:
     image: nextcloud:latest
@@ -12,3 +13,5 @@ services:
       - "8080:80"
     volumes:
       - ./nextcloud:/var/www/html
+    restart: unless-stopped
+
