@@ -4,10 +4,20 @@
 
 ## Inhaltsverzeichnis
 
+- [Netzwerkkonfiguration](#networkconfig)
+  - [Statische IP Festlegen](#staticip)
+- [Benutzer anlegen und konfigurieren](#user)
+- [Firewall konfiguration](#firewall)
+- [ToDo-Listen-Verwaltung und Nextcloud deployen](#deploy)
+  - [Autostart](#autostart)
+  - [Mit Docker](#docker)
+
 ## Vorgehen
 
+<a name="networkconfig"></a>
 ### Netzwerkkonfiguration
 
+<a name="staticip"></a>
 #### Statische IP Festlegen
 
 Zuerst die Datei /etc/dhcpcd.conf wie folgt editieren um eine statische IP zu erhalten 
@@ -68,7 +78,7 @@ Nun kan man sich im WLAN anmelden
 ````
 wpa_cli -i wlan0 select_network 0 
 ````
-
+<a name="user"></a>
 ### Benutzer anlegen und konfigurieren
 ````
 sudo adduser benutzer72
@@ -80,6 +90,7 @@ Fernzugriff soll sudo Rechte bekommen also wird er zur sudo group hinzugefügt
 sudo adduser fernzugriff sudo
 ````
 
+<a name="firewall"></a>
 ### Firewall konfiguration
 Zuerst Firewall installieren
 ````
@@ -98,6 +109,7 @@ Firewall aktivieren
 sudo ufw enable
 ````
 
+<a name="deploy"></a>
 ### ToDo-Listen-Verwaltung und Nextcloud deployen
 
 Git, Docker und Docker Compose installieren
@@ -124,6 +136,7 @@ python main.py
 
 Nun ist die API über die IP 192.168.24.164 erreichbar
 
+<a name="autostart"></a>
 #### Autostart
 
 Für App autostart supervisor installieren:
@@ -152,6 +165,7 @@ sudo supervisorctl update
 sudo supervisorctl start flask_app
 ````
 
+<a name="docker"></a>
 #### Mit Docker
 
 Container builden
