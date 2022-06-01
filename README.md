@@ -1,5 +1,6 @@
 # Deployment einer Webanwendung
-Von Armin Spöllmann und Jannik Möbius
+Von Armin Spöllmann und Jannik Möbius </br>
+[https://github.com/ItZzMJ/ToDoList_OpenAPI](#https://github.com/ItZzMJ/ToDoList_OpenAPI)
 
 ## Inhaltsverzeichnis
 
@@ -167,6 +168,40 @@ sudo supervisorctl start flask_app
 
 <a name="docker"></a>
 #### Mit Docker
+
+Die Datei Dockerfile erstellen und folgendes einfügen
+````
+# syntax=docker/dockerfile:1
+FROM python:3.7-alpine
+WORKDIR /code
+RUN apk add --no-cache gcc musl-dev linux-headers nano bash
+COPY ./requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+EXPOSE 80
+COPY . /data
+CMD ["python", "/data/main.py"]
+````
+
+Die Datei docker-compose.yml erstellen und folgendes einfügen
+````
+version: '3'
+services:
+  flask:
+    build: .
+    ports:
+      - "80:80"
+      - "8000:5000"
+    restart: unless-stopped
+
+  nextcloud:
+    image: nextcloud:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nextcloud:/var/www/html
+    restart: unless-stopped
+````
+
 
 Container builden
 ````
