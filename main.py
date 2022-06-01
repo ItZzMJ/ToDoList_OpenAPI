@@ -116,7 +116,7 @@ def change_todolist_entry(list_id, entry_id):
 def get_users():
     if request.method == "GET":
         print("Get Users")
-        return jsonify(str([userList[i].toJson() for i in userList]))
+        return jsonify([userList[i].toJson() for i in userList])
     elif request.method == "POST":
         print("Post Users")
 
