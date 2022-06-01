@@ -2,7 +2,7 @@ import requests
 import json
 from pprint import pprint
 
-url = "http://127.0.0.1/"
+url = "http://192.168.24.164/"
 headers = {'content-type': 'application/json'}
 
 # user erstellen
