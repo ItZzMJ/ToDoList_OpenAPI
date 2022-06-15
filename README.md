@@ -10,7 +10,7 @@ Von Armin Spöllmann und Jannik Möbius </br>
 - [Firewall Konfiguration](#firewall)
 - [ToDo-Listen-Verwaltung und Nextcloud deployen](#deploy)
   - [Autostart](#autostart)
-  - [Mit Docker](#docker)
+  - [Mit Docker und einem Nextcloud-Container deployen](#docker)
 
 <div style="page-break-after: always;"></div>
 
@@ -136,7 +136,7 @@ sudo ufw enable
 ````
 ---
 <a name="deploy"></a>
-### ToDo-Listen-Verwaltung und Nextcloud deployen
+### ToDo-Listen-Verwaltung deployen
 
 Um das Hochladen der ToDo-Listen-Verwaltung auf den Server zu vereinfachen, wird der Code aus dem Git-Repository geklont.
 Dazu wird zuerst Git auf dem Server installiert.
@@ -215,7 +215,7 @@ sudo supervisorctl start flask_app
 ````
 
 <a name="docker"></a>
-#### Mit Docker
+#### Mit Docker und einem Nextcloud-Container deployen
 
 Um die ToDo-Listen-Verwaltung als Container mit Docker zu deployen, muss zuerst Docker, Docker Compose und weitere Dependencies installiert werden.
 ````
