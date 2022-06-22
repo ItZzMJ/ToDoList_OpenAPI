@@ -184,7 +184,6 @@ sudo nano /etc/supervisor/conf.d/todolist.conf
 In dieser Konfigurationsdatei wird dem Programm zuerst ein Name gegeben.
 ````
 [program:flask_app]
-
 ````
 Danach muss das Kommando festgelegt werden, welches überwacht werden soll.
 ````
@@ -267,7 +266,6 @@ services:
       - "80:80"
       - "8000:5000"
     restart: unless-stopped
-
 ````
 
 Bei dieser Gelegenheit bietet es sich an einen weiteren Service einzurichten, Nextcloud.
