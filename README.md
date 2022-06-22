@@ -152,9 +152,17 @@ Nun kann das Repository einfach geklont werden.
 git clone https://github.com/ItZzMJ/ToDoList_OpenAPI.git
 ````
 
-Um die App nun zu starten, muss man zuerst in das geklonte Verzeichnis gehen um mit <strong>python main.py</strong> die App zu starten. 
+Als nächstes müssen die Dependencies der App installiert werden. Dafür wird zuerst in das Verzeichnis der App gewechselt.
 ````
 cd ToDoList_OpenAPI
+````
+Und dann mit folgendem Kommando die Dependencies aus <strong>requirements.txt</strong> installiert.
+```
+pip install -r requirements.txt
+````
+
+Anschließend kann die App gestartet werden.
+````
 python main.py
 ````
 
