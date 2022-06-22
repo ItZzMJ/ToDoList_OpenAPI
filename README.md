@@ -4,26 +4,27 @@ Von Armin Spöllmann und Jannik Möbius </br>
 
 ## Inhaltsverzeichnis
 
-- [Netzwerkkonfiguration](#networkconfig)
-  - [Statische IP Festlegen](#staticip)
-- [Benutzer anlegen und konfigurieren](#user)
-- [Firewall Konfiguration](#firewall)
-- [ToDo-Listen-Verwaltung und Nextcloud deployen](#deploy)
-  - [Autostart](#autostart)
-  - [Mit Docker und einem Nextcloud-Container deployen](#docker)
+- [1. Netzwerkkonfiguration](#networkconfig)
+  - [1.1 Statische IP Festlegen](#staticip)
+  - [1.2 WLAN-Verbindung herstellen](#wlan)
+- [2. Benutzer anlegen und konfigurieren](#user)
+- [3. Firewall Konfiguration](#firewall)
+- [4. ToDo-Listen-Verwaltung und Nextcloud deployen](#deploy)
+  - [4.1 Autostart](#autostart)
+  - [4.2 Mit Docker und einem Nextcloud-Container deployen](#docker)
 
 <div style="page-break-after: always;"></div>
 
 ## Vorgehen
 
 <a name="networkconfig"></a>
-### Netzwerkkonfiguration
+### 1. Netzwerkkonfiguration
 Damit beim nächsten start des Raspberry PIs die IP Adresse gleich bleibt, muss zuerst eine statische IP Adresse eingerichtet werden.
 
 <a name="staticip"></a>
-#### Statische IP Festlegen
+#### 1.1 Statische IP Festlegen
 
-Zuerst muss die Datei <strong>/etc/dhcpcd.conf</strong> wie folgt editiert werden um eine statische IP zu erhalten. Um die Datei zu editieren wird ein Editor benötigt. Wir verwenden hier den VI Editor.
+Zuerst muss die Datei <strong>/etc/dhcpcd.conf</strong> wie folgt editiert werden um eine statische IP zu erhalten. Um die Datei zu editieren wird ein Editor benötigt. Hierzu wird der VI Editor verwendet.
 
 ````
 vi /etc/dhcpd.conf
@@ -51,7 +52,9 @@ Damit die Änderungen wirksam werden muss der Daemon neugestartet werden.
 sudo systemctl restart dhcpcd
 ````
 
-Nun verbinden wir uns mit dem WLAN. Dazu muss die Datei <strong>/etc/wpa_supplicant/wpa_supplicant.conf</strong> editiert werden. Bei <strong>SSID</strong> muss der WLAN Name eingetragen werden und unter <strong>PASSWORD</strong> das Passwort.
+<a name="wlan"></a>
+#### 1.2 WLAN-Verbindung herstellen
+Dazu muss die Datei <strong>/etc/wpa_supplicant/wpa_supplicant.conf</strong> editiert werden. Bei <strong>SSID</strong> muss der WLAN Name eingetragen werden und unter <strong>PASSWORD</strong> das Passwort.
 ````
 ctrl_interface=DIR=/var/run/wpa_supplicant 
 GROUP=netdev
@@ -67,7 +70,7 @@ Auch hier muss der Service neugestartet werden damit die Änderungen wirksam wer
 sudo systemctl restart dhcpcd
 ````
 
-Nun können wir uns die Liste der verfügbaren Netzwerken anzeigen.
+Nun kann die Liste der verfügbaren Netzwerke angezeigt werden.
 ````
 wpa_cli -i wlan0 list_networks
 ````
@@ -88,14 +91,14 @@ save_config
 quit
 ````
 
-Nun kann man sich im WLAN anmelden.
+Nun ist die Anmeldung im WLAN möglich.
 ````
 wpa_cli -i wlan0 select_network 0 
 ````
 
 ---
 <a name="user"></a>
-### Benutzer anlegen und konfigurieren
+### 2. Benutzer anlegen und konfigurieren
 Benutzer werden mit dem adduser Befehl hinzugefügt.
 ````
 sudo adduser benutzer72
@@ -111,7 +114,7 @@ Da Sudo Benutzer automatisch SSH Rechte haben, müssen diese nicht manuell einge
 
 ---
 <a name="firewall"></a>
-### Firewall Konfiguration
+### 3. Firewall Konfiguration
 Um nur Verbindungen zu dem Server über bestimmte Ports zu erlauben, muss zuerst eine Firewall installiert werden.
 ````
 sudo apt-get install ufw
@@ -136,7 +139,7 @@ sudo ufw enable
 ````
 ---
 <a name="deploy"></a>
-### ToDo-Listen-Verwaltung deployen
+### 4. ToDo-Listen-Verwaltung deployen
 
 Um das Hochladen der ToDo-Listen-Verwaltung auf den Server zu vereinfachen, wird der Code aus dem Git-Repository geklont.
 Dazu wird zuerst Git auf dem Server installiert.
@@ -144,7 +147,7 @@ Dazu wird zuerst Git auf dem Server installiert.
 sudo apt install git
 ````
 
-Nun kann man das Repository einfach klonen.
+Nun kann das Repository einfach geklont werden.
 ````
 git clone https://github.com/ItZzMJ/ToDoList_OpenAPI.git
 ````
@@ -155,10 +158,10 @@ cd ToDoList_OpenAPI
 python main.py
 ````
 
-Nun ist die ToDo-Listen-Verwaltung über die IP 192.168.24.164 erreichbar
+Nun ist die ToDo-Listen-Verwaltung über die IP 192.168.24.164 erreichbar.
 
 <a name="autostart"></a>
-#### Autostart
+#### 4.1 Autostart
 
 Damit die App bei Serverneustart oder bei einem Error wieder automatisch startet, wird ein <strong>Supervisor</strong> installiert.
 ````
@@ -175,7 +178,7 @@ In dieser Konfigurationsdatei wird dem Programm zuerst ein Name gegeben.
 [program:flask_app]
 
 ````
-Danach muss das Kommando festgelegt werden, welches überwacht werden soll 
+Danach muss das Kommando festgelegt werden, welches überwacht werden soll.
 ````
 command = python main.py
 ````
@@ -215,9 +218,9 @@ sudo supervisorctl start flask_app
 ````
 
 <a name="docker"></a>
-#### Mit Docker und einem Nextcloud-Container deployen
+#### 4.2 Mit Docker und einem Nextcloud-Container deployen
 
-Um die ToDo-Listen-Verwaltung als Container mit Docker zu deployen, muss zuerst Docker, Docker Compose und weitere Dependencies installiert werden.
+Um die ToDo-Listen-Verwaltung als Container mit Docker zu deployen, muss zuerst Docker, Docker-Compose und weitere Dependencies installiert werden.
 ````
 sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 ````
@@ -282,7 +285,3 @@ docker-compose up -d
 ````
 
 Nun ist die Einrichtung abgeschlossen.
-
-
-
-
