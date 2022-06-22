@@ -51,6 +51,7 @@ Damit die Änderungen wirksam werden muss der Daemon neugestartet werden.
 ````
 sudo systemctl restart dhcpcd
 ````
+<div style="page-break-after: always;"></div>
 
 <a name="wlan"></a>
 #### 1.2 WLAN-Verbindung herstellen
@@ -96,7 +97,6 @@ Nun ist die Anmeldung im WLAN möglich.
 wpa_cli -i wlan0 select_network 0 
 ````
 
----
 <a name="user"></a>
 ### 2. Benutzer anlegen und konfigurieren
 Benutzer werden mit dem adduser Befehl hinzugefügt.
@@ -137,7 +137,9 @@ Damit die Änderungen aktiv werden, muss die Firewall noch aktiviert werden.
 ````
 sudo ufw enable
 ````
----
+
+<div style="page-break-after: always;"></div>
+
 <a name="deploy"></a>
 ### 4. ToDo-Listen-Verwaltung deployen
 
@@ -266,6 +268,7 @@ services:
       - "80:80"
       - "8000:5000"
     restart: unless-stopped
+
 ````
 
 Bei dieser Gelegenheit bietet es sich an einen weiteren Service einzurichten, Nextcloud.
